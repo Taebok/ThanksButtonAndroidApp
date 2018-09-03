@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.project.tbj12.thanksbutton.WeatherLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/layout_border"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <Switch
+        android:id="@+id/weather_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"/>
+
+    <TableLayout
+        android:id="@+id/weather_body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:background="#99999999"
+        android:padding="2dp"
+        android:stretchColumns="*">
+
+        <TableRow android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/weather_temperature"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="#ffffffff"
+                android:hint="@string/weather_temperature_hint" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="#ffffffff">
+
+                <TextView
+                    android:id="@+id/weather_climate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/weather_climate_hint" />
+
+                <ImageView
+                    android:id="@+id/weather_climate_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/weather_climate_icon" />
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="#ffffffff">
+
+                <TextView
+                    android:id="@+id/weather_wind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/weather_wind_hint" />
+
+                <ImageView
+                    android:id="@+id/weather_wind_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/weather_wind_icon" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="#ffffffff">
+
+                <TextView
+                    android:id="@+id/weather_wind_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/weather_wind_speed_hint" />
+
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
+
+</com.project.tbj12.thanksbutton.WeatherLayout>

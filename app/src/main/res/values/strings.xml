@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">ThanksButton</string>
+    <string name="becauseof_hint">감사 할 이유를 적어봐요.</string>
+    <string name="becauseof_text_size_limit">/ 20글자</string>
+    <string name="becauseof_button">Thank!</string>
+    <string name="weather_switch_off_text">날씨정보를 기록하지 않습니다.</string>
+    <string name="weather_temperature_hint">온도(섭씨)</string>
+    <string name="weather_climate_hint">기상정보</string>
+    <string name="weather_climate_icon">기상정보 그림표현</string>
+    <string name="weather_wind_hint">풍향정보</string>
+    <string name="weather_wind_icon">풍향정보 그림표현</string>
+    <string name="weather_wind_speed_hint">풍속정보</string>
+    <string name="location_none_address_message">위치정보를 확인할 수 없습니다. 지도에 안에 위치확인(오른쪽 맨 처음)버튼을 눌러주세요.</string>
+    <string name="location_switch_off_text">위치정보를 기록하지 않습니다.</string>
+    <string name="location_address_hint">주소를 직접 입력할 수 있습니다.</string>
+    <string name="location_address_button">찾기</string>
+    <string name="location_permission_not_allowed">위치정보 접근권한이 필요합니다.</string>
+    <string name="location_permission_allowed">위치정보 접근권한이 있습니다.</string>
+    <string name="location_not_service_message">위치확인 서비스를 켜시면 현재 위치를 쉽게 알 수 있습니다.</string>
+    <string name="location_setting_dialog_title">위치정보 얻기 설정</string>
+    <string name="location_setting_dialog_message">위치정보 서비스가 꺼져 있습니다. 서비스를 켜겠습니까?</string>
+    <string name="location_none_location_message">입력한 지명 또는 주소로 확인된 위치정보가 없습니다.</string>
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.project.tbj12.thanksbutton.LocationLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/location_content_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/layout_border"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <Switch
+        android:id="@+id/location_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp" />
+
+    <LinearLayout
+        android:id="@+id/location_body"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="5dp"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/location_map"
+            class="com.project.tbj12.thanksbutton.MyLocationMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            map:cameraZoom="15"
+            map:uiScrollGestures="true"
+            map:uiZoomControls="true"
+            map:uiZoomGestures="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/location_address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="@string/location_address_hint"
+                android:inputType="textPostalAddress|textMultiLine"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/location_address_input_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:text="@string/location_address_button"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/location_switch_off_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/location_switch_off_text"
+        android:visibility="gone" />
+</com.project.tbj12.thanksbutton.LocationLayout>
