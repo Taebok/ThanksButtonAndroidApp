@@ -2,6 +2,7 @@ package com.project.tbj12.thanksbutton;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -69,27 +70,37 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
 //            showSettingDialog();
 //        }
 
-        getMapAsync(this);
-
         // Get FusedLocationProviderClient for getting my location
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
 
+        if (markerOption == null) {
+            markerOption = new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker());
+        }
+
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // When parent layout's switch is on, statusContentBody is true
+        getMapAsync(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("FragmentOnResume", "========= onResume ==========");
 
         checkPermission();
         updateLocationUI();
 
         getCurrentLocation();
-
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        Log.d("FragmentOnPause", "############### onPause ###############");
     }
 
     // Set marker and call onChangedLocation method.
@@ -111,17 +122,15 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
 
     // Set position of new marker or existed marker
     void moveMarker(LatLng latLng) {
-        if (markerOption == null) {
-            markerOption = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker());
-        } else {
-            markerOption.position(latLng);
-        }
-
-        if (map != null) {
-            map.clear();
-            map.addMarker(markerOption);
-            map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        }
+//        if (markerOption == null) {
+//            markerOption = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.defaultMarker());
+//        } else {
+//            markerOption.position(latLng);
+//        }
+        markerOption.position(latLng);
+        map.clear();
+        map.addMarker(markerOption);
+        map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
     // Get Marker Position's Address and ChangedLocationListener's method call.
@@ -191,7 +200,7 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
     }
 
     // If call getMapAsync(), call OnMapReadyCallback method.
-    // Asyncronous get map data.
+    // Asynchronously get map data.
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d("Google Map", "GoogleMap Service~~~~~~~~~~~~~");

@@ -1,7 +1,6 @@
 package com.project.tbj12.thanksbutton;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -9,19 +8,23 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 class LocationLayout extends LinearLayout implements View.OnClickListener {
+    static boolean switchStatus;
     private final Context context;
     private OnRequestedForLocationListener onRequestedForLocationListener;
-    private boolean switchStatus;
+    private Fragment mapFragment;
 
     public LocationLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
+        // switch 상태와 그에 따른 view의 visible value를 어떻게 유지 할까?
+        // Switch's default status value gets from ../values/default_value.xml
         switchStatus = context.getResources().getBoolean(R.bool.location_switch_status);
     }
 
@@ -32,16 +35,36 @@ class LocationLayout extends LinearLayout implements View.OnClickListener {
         this.requestFocus();
 
         // Set switch's changed listener.
-        // switch 상태와 그에 따른 view의 visible value를 어떻게 유지 할까?
         Switch checkedLocationSwitch = findViewById(R.id.location_switch);
-        LinearLayout locationBody = findViewById(R.id.location_body);
-        TextView textViewForHiddenLocationContent = findViewById(R.id.location_switch_off_message);
+        final LinearLayout locationBody = findViewById(R.id.location_body);
+        final TextView textViewForHiddenLocationContent = findViewById(R.id.location_switch_off_message);
 
-        OnSwitchListener onSwitchListener = new OnSwitchListener(locationBody,
-                textViewForHiddenLocationContent);
+        mapFragment = ((AppCompatActivity) context).getSupportFragmentManager().findFragmentById
+                (R.id.location_map);
+
+        checkedLocationSwitch.setChecked(switchStatus);
+        OnSwitchListener onSwitchListener = new OnSwitchListener(checkedLocationSwitch, switchStatus) {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d("Switch Toggle", "Switch Toggle : " + isChecked);
+
+                if (!isChecked) {
+                    switchViewVisibility(textViewForHiddenLocationContent, locationBody);
+                    if (mapFragment.isAdded())
+                        ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction()
+                                .detach(mapFragment).commit();
+                } else {
+                    switchViewVisibility(locationBody, textViewForHiddenLocationContent);
+                    if (mapFragment.isDetached())
+                        ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction()
+                                .attach(mapFragment).commit();
+                    mapFragment.onResume();
+                }
+            }
+        };
 
         checkedLocationSwitch.setOnCheckedChangeListener(onSwitchListener);
-        checkedLocationSwitch.setChecked(switchStatus);
 
         setListenerOnMapFragment();
 
@@ -53,15 +76,9 @@ class LocationLayout extends LinearLayout implements View.OnClickListener {
             addressInputButton.setClickable(true);
     }
 
-    @Override
-    public void onDescendantInvalidated(@NonNull View child, @NonNull View target) {
-        super.onDescendantInvalidated(child, target);
-    }
-
     // Set ChangedLocationListener in MyLocationMapFragment class
     private void setListenerOnMapFragment() {
-        Fragment mapFragment = ((AppCompatActivity) context).getSupportFragmentManager().findFragmentById
-                (R.id.location_map);
+
         final EditText locationAddress = findViewById(R.id.location_address);
 
         if (mapFragment instanceof MyLocationMapFragment) {
@@ -90,7 +107,6 @@ class LocationLayout extends LinearLayout implements View.OnClickListener {
         if (onRequestedForLocationListener != null) {
             onRequestedForLocationListener.onRequestForLocation(textAddress);
         }
-
     }
 
     interface OnRequestedForLocationListener {

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <bool name="location_switch_status">false</bool>
+    <bool name="weather_switch_status">true</bool>
 </resources>
