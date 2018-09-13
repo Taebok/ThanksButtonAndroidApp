@@ -26,6 +26,7 @@ class BecauseOfLayout extends LinearLayout implements TextWatcher {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        this.requestFocus();
 
         becauseofTextSize = findViewById(R.id.becauseof_text_size);
         EditText becauseofInput = findViewById(R.id.becauseof_input);

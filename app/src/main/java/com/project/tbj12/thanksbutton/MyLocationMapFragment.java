@@ -41,6 +41,7 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
     private boolean isLocationPermissionGranted;
     private Context context;
     private GoogleMap map;
+    private boolean isMapReady;
     //    private LocationManager manager;
     private Location currentLocation;
     private MarkerOptions markerOption;
@@ -71,7 +72,9 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
 //        }
 
         // Get FusedLocationProviderClient for getting my location
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+        if (context != null) {
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+        }
 
         if (markerOption == null) {
             markerOption = new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker());
@@ -101,9 +104,10 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
     public void onPause() {
         super.onPause();
         Log.d("FragmentOnPause", "############### onPause ###############");
+        isMapReady = false;
     }
 
-    // Set marker and call onChangedLocation method.
+    // Set marker and call onChangedLocationWithAddress method.
     // Get the last known currentLocation.
     @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
@@ -133,10 +137,12 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
         map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
-    // Get Marker Position's Address and ChangedLocationListener's method call.
-    void callOnChangedLocation(String address) {
-        if (changedLocationListener != null)
-            changedLocationListener.onChangedLocation(address);
+    // Get marker position's an address and a lat&lng and call ChangedLocationListener's method.
+    void callOnChangedLocation(String address, LatLng latLng) {
+        if (changedLocationListener != null) {
+            changedLocationListener.onChangedLocationWithAddress(address);
+            changedLocationListener.onChangedLocationWithLatLng(latLng);
+        }
     }
 
     void checkPermission() {
@@ -191,6 +197,9 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
             map.setMyLocationEnabled(false);
             map.getUiSettings().setMyLocationButtonEnabled(false);
         }
+
+        // If the map was ready, it's true.
+        isMapReady = true;
     }
 
     @Override
@@ -237,7 +246,9 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
         currentLocation = location;
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         moveMarker(latLng);
-        callOnChangedLocation(getAddressAtCurrentLocation());
+
+        String address = getAddressAtCurrentLocation();
+        callOnChangedLocation(address, latLng);
     }
 
     // Pass an address to LocationLayout.class
@@ -273,7 +284,12 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
     }
 
     // If it can find location from address, display marker on map
+    // This method can be called from outside. At that time, isMapReady must be true.
     void getLocationFromAddress(String address) {
+        if (!isMapReady) {
+            return;
+        }
+
         Locale locale = Locale.getDefault();
         Geocoder geocoder = new Geocoder(context, locale);
         try {
@@ -281,8 +297,7 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
             if (addressList != null) {
                 if (addressList.isEmpty()) {
                     Toast.makeText(context, R.string.location_none_location_message, Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     Location location = new Location(LocationManager.PASSIVE_PROVIDER);
                     location.setLatitude(addressList.get(0).getLatitude());
                     location.setLongitude(addressList.get(0).getLongitude());
@@ -297,17 +312,6 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
             e.printStackTrace();
         }
 
-    }
-
-    // Return OnRequestForLocationListener in LocaitonLayout class at this fragment attached.
-    LocationLayout.OnRequestedForLocationListener getListenerOnLocationLayout() {
-
-        return new LocationLayout.OnRequestedForLocationListener() {
-            @Override
-            public void onRequestForLocation(String address) {
-                getLocationFromAddress(address);
-            }
-        };
     }
 
     void setChangedLocationListener(OnChangedLocationListener listener) {
@@ -338,7 +342,13 @@ public class MyLocationMapFragment extends SupportMapFragment implements OnMapRe
         alertDialog.show();
     }
 
+    public boolean isMapReady() {
+        return isMapReady;
+    }
+
     interface OnChangedLocationListener {
-        void onChangedLocation(String address);
+        void onChangedLocationWithAddress(String address);
+
+        void onChangedLocationWithLatLng(LatLng currentLatLng);
     }
 }

@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/layout_border"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
@@ -61,6 +63,6 @@
         android:id="@+id/becauseof_thanks_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/becauseof_button"
-        android:layout_margin="5dp"/>
+        android:layout_margin="5dp"
+        android:text="@string/becauseof_button" />
 </com.project.tbj12.thanksbutton.BecauseOfLayout>
